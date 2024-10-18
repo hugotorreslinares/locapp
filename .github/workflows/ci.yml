@@ -24,7 +24,28 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "APP_KEY=base64:$(openssl rand -base64 32)" > .env
+          echo "APP_KEY=base64:$(openssl rand -base64 32)" >> .env
           echo "APP_ENV=production" >> .env
           echo "APP_DEBUG=false" >> .env
-          echo "DB_CONNECTION=mysql" >>
+          echo "DB_CONNECTION=mysql" >> .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+
+      - name: Generate application key
+        run: php artisan key:generate
+
+      - name: Set Directory Permissions
+        run: chmod -R 775 storage bootstrap/cache
+
+      - name: 📂 Sync files via FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.2.0
+        with:
+          server: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          local-dir: ./
+          server-dir: /www/  # Change this to your remote directory
