@@ -17,6 +17,18 @@ jobs:
       - name: Install Dependencies
         run: composer install --optimize-autoloader --no-dev
 
+      - name: Create .env file
+        run: |
+          echo "APP_KEY=base64:$(openssl rand -base64 32)" > .env
+          echo "APP_ENV=local" >> .env
+          echo "APP_DEBUG=true" >> .env
+          echo "DB_CONNECTION=mysql" >> .env
+          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_PORT=3306" >> .env
+          echo "DB_DATABASE=your_database" >> .env
+          echo "DB_USERNAME=your_username" >> .env
+          echo "DB_PASSWORD=your_password" >> .env
+
       - name: Generate key
         run: php artisan key:generate
 #      - name: Database Migration
