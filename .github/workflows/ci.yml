@@ -10,10 +10,10 @@ jobs:
 
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-#      - name: Install Dependencies
-#        run: composer install --optimize-autoloader --no-dev
-#      - name: Generate key
-#        run: php artisan key:generate
+      - name: Install Dependencies
+        run: composer install --optimize-autoloader --no-dev
+      - name: Generate key
+        run: php artisan key:generate
 #      - name: Database Migration
 #        run: php artisan migrate
       #- name: Optimize clear
@@ -24,7 +24,7 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.2.0
         with:
-          server:  ${{ secrets.HOST }}
+          server: ftp-htorres.alwaysdata.net
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
